@@ -1,5 +1,5 @@
 # DevTools
-A collection of dev utilities that Makes Mojaloop Great Again
+Tools and Utilities to make developing mojaloop easier.
 
 ## central-ledger
 
