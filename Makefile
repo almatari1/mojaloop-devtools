@@ -16,14 +16,14 @@ build: build-docker-pull build-start-mysql
 build-docker-pull:
 	$(info $(cyn)[Pulling Docker]$(reset))
 	docker-compose -f ./docker/docker-compose.base.yml pull
-	touch build-docker-pull
+	@touch build-docker-pull
 
 build-start-mysql:
 	$(info $(cyn)[Starting mysql container init process]$(reset))
 	docker-compose -f ./docker/docker-compose.base.yml up -d mysql
 	./scripts/util/_wait_for_mysql_init.sh
 	docker-compose -f ./docker/docker-compose.base.yml stop mysql
-	touch build-start-mysql
+	@touch build-start-mysql
 
 
 ##
@@ -132,14 +132,24 @@ reset-mysql:
 ##
 # Cleanup
 ##
-clean: reset-pull-status reset-mysql-build reset-test-config
+clean: remove-containers reset-pull-status reset-mysql-build reset-test-config
+
+remove-containers:
+	$(info $(cyn)[Removing all container]$(reset))
+	@docker rm -f dt_mysql 2>&1  > /dev/null || echo 'Done'
+	@docker rm -f dt_ml-api-adapter 2>&1  > /dev/null || echo 'Done'
+	@docker rm -f dt_central-ledger 2>&1  > /dev/null || echo 'Done'
+	@docker rm -f dt_kafka 2>&1  > /dev/null || echo 'Done'
+	@docker rm -f dt_mockserver 2>&1  > /dev/null || echo 'Done'
+	@docker rm -f dt_simulator 2>&1  > /dev/null || echo 'Done'
+	@docker rm -f dt_ml-api-adapter-endpoint 2>&1  > /dev/null || echo 'Done'
 
 reset-pull-status:
 	@rm -f build-docker-pull
 
 reset-mysql-build:
 	$(info $(cyn)[Removing mysql container]$(reset))
-	@docker rm -f dt_mysql
+	@docker rm -f dt_mysql 2>&1  > /dev/null || echo 'Already removed'
 	@rm -f build-start-mysql
 
 reset-test-config:

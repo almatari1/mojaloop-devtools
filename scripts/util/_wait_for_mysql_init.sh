@@ -24,4 +24,4 @@ until waitFor; do
   sleep 5
 done
 
-printf $cyn"DONE"$white
+printf $cyn"DONE\n"$white
