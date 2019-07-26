@@ -91,6 +91,7 @@ test-config: test-config-migrate test-config-setup
 
 test-config-migrate:
 	$(info $(cyn)[Running migrations from `central-ledger`]$(reset))
+	./scripts/util/_wait_for_centralledger_init.sh
 	$(call fcmd_centralledger,"npm run migrate")
 	@touch test-config-migrate
 
@@ -117,23 +118,33 @@ get_positions:
 
 
 ##
+# Reset MySQL container and re-run migrations
+##
+reset-mysql:
+	@make stop reset-mysql-build reset-test-config build-start-mysql
+	# TODO: can re-run whatever the last start command was?
+	@make start
+	# TODO: fix issues where central_ledger migrations are locked...
+	@make test-config
+
+
+
+##
 # Cleanup
 ##
-clean: reset-pull-status reset-mysql
+clean: reset-pull-status reset-mysql-build reset-test-config
 
 reset-pull-status:
 	@rm -f build-docker-pull
 
-reset-mysql:
+reset-mysql-build:
 	$(info $(cyn)[Removing mysql container]$(reset))
 	@docker rm -f dt_mysql
 	@rm -f build-start-mysql
 
-
 reset-test-config:
 	@rm -f test-config-setup
 	@rm -f test-config-migrate
-
 
 ##
 # Functions
