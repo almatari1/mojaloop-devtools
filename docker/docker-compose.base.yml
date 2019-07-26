@@ -1,0 +1,84 @@
+version: "3.7"
+services:
+  #---Core Services---
+  central-ledger:
+    image: mojaloop/central-ledger:latest
+    container_name: dt_central-ledger
+    links:
+      - mysql
+      - kafka
+    ports:
+      - "3001:3001"
+    volumes:
+       - ./central-ledger/default.json:/opt/central-ledger/config/default.json
+
+  ml-api-adapter:
+    image: mojaloop/ml-api-adapter:latest
+    container_name: dt_ml-api-adapter
+    links:
+      - kafka
+      - simulator
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./ml-api-adapter/default.json:/opt/ml-api-adapter/config/default.json
+    command:
+      - "node"
+      - "src/api/index.js"
+
+  #---State, Transport---
+  mysql:
+    image: mysql/mysql-server
+    container_name: dt_mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./sql-init/:/docker-entrypoint-initdb.d/
+    environment:
+      - MYSQL_USER=${DBUSER:-central_ledger}
+      - MYSQL_PASSWORD=${DBPASS:-password}
+      - MYSQL_DATABASE=${DBUSER:-central_ledger}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+  kafka:
+    image: johnnypark/kafka-zookeeper:2.3.0
+    container_name: dt_kafka
+    volumes:
+      - ./kafka/:/opt/kafka_2.12-2.3.0/config/
+    ports:
+      - "2181:2181"
+      - "9092:9092" 
+      #Note: internally, docker services will connect on 29092
+    environment:
+      - ZOO_LOG4J_PROP=DEBUG
+
+  #---Test Utils---
+  mockserver:
+    image: jamesdbloom/mockserver
+    container_name: dt_mockserver
+    ports:
+      - "1080:1080"
+
+  temp_curl:
+    image: byrnedo/alpine-curl
+    container_name: dt_temp_curl
+    links:
+      - mockserver
+    volumes:
+      - ./wait-for-mockserver.sh:/opt/wait-for-mockserver.sh
+    entrypoint: [ "sh", "-c" ]
+    command:
+      - /opt/wait-for-mockserver.sh
+    environment:
+      - MOCK_HOST=mockserver
+
+  simulator:
+    image: mojaloop/simulator:latest
+    container_name: dt_simulator
+    ports:
+      - "8444:8444"
+    environment:
+      - LOG_LEVEL=debug
+      - PARTIES_ENDPOINT=http://ml-api-adapter:3000
+      - QUOTES_ENDPOINT=http://ml-api-adapter:3000
+      - TRANSFERS_ENDPOINT=http://ml-api-adapter:3000

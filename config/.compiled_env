@@ -1,0 +1,7 @@
+CLUSTER_IP=localhost:3001
+CURRENCY=USD
+EMAIL_ADDRESS=email@example.com
+CENTRAL_LEDGER_HOST=localhost:3001
+# SIMULATOR_HOST=simulator.moja-box.vessels.tech - cloud kube env
+# SIMULATOR_HOST=localhost:8444 - everything is local env
+SIMULATOR_HOST=simulator:8444 #- docker env
