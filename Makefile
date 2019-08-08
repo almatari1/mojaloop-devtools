@@ -8,6 +8,9 @@ blu:=$(shell tput setaf 4)
 cyn:=$(shell tput setaf 5)
 reset:=$(shell tput sgr0)
 
+#set the services in ./config/services.conf
+services = $(shell grep -v '^;' ./config/services.conf)
+
 ##
 # Devtools Setup
 ##
@@ -40,7 +43,7 @@ start: build start-all
 ##
 start-all:
 	$(info $(cyn)[Starting in default mode]$(reset))
-	docker-compose -f ./docker/docker-compose.base.yml up -d
+	docker-compose -f ./docker/docker-compose.base.yml up -d ${services}
 
 ##
 # Start docker-compose in the following manner:
@@ -110,8 +113,9 @@ test-config-setup:
 # Utils
 ##
 log:
+		# logs -f kafka ml-api-adapter central-ledger simulator
 	docker-compose -f ./docker/docker-compose.base.yml \
-		logs -f kafka ml-api-adapter central-ledger simulator
+		logs -f kafka central-ledger simulator quoting-service
 
 get_positions:
 	@./scripts/_get_positions.sh

@@ -1,6 +1,18 @@
 version: "3.7"
 services:
   #---Core Services---
+  account-lookup-service:
+    image: mojaloop/account-lookup-service:latest
+    container_name: dt_account-lookup-service
+    links:
+      - mysql
+      - central-ledger
+    ports:
+      - "4001:4001"
+      - "4002:4002"
+    volumes:
+      - ./account-lookup-service/default.json:/opt/account-lookup-service/config/default.json
+
   central-ledger:
     image: mojaloop/central-ledger:latest
     container_name: dt_central-ledger
@@ -25,6 +37,17 @@ services:
     command:
       - "node"
       - "src/api/index.js"
+
+  #---Extension Services---
+  quoting-service:
+    image: mojaloop/quoting-service:v6.3.0-snapshot
+    container_name: dt_quoting-service
+    links:
+      - mysql
+    ports:
+      - "3002:3002"
+    volumes:
+      - ./quoting-service/default.json:/opt/quoting-service/config/default.json
 
   #---State, Transport---
   mysql:

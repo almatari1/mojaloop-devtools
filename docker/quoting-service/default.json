@@ -1,0 +1,16 @@
+{
+  "HOSTNAME": "http://quoting-service",
+  "LISTEN_ADDRESS": "0.0.0.0",
+  "PORT": 3002,
+  "DATABASE": {
+    "DIALECT": "mysql",
+    "HOST": "mysql",
+    "PORT": 3306,
+    "USER": "central_ledger",
+    "PASSWORD": "password",
+    "SCHEMA": "central_ledger",
+    "POOL_MINSIZE": 10,
+    "POOL_MAXSIZE": 10
+  },
+  "SIMPLE_ROUTING_MODE": true
+}
