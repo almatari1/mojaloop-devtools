@@ -2,10 +2,10 @@ version: "3.7"
 services:
   #---Core Services---
   account-lookup-service:
-    image: mojaloop/account-lookup-service:latest
+    image: mojaloop/account-lookup-service:v6.2.4-snapshot
     container_name: dt_account-lookup-service
     links:
-      - mysql
+      - mysql-als
       - central-ledger
     ports:
       - "4001:4001"
@@ -61,6 +61,20 @@ services:
       - MYSQL_USER=${DBUSER:-central_ledger}
       - MYSQL_PASSWORD=${DBPASS:-password}
       - MYSQL_DATABASE=${DBUSER:-central_ledger}
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+
+  # TODO: not sure if this is right...
+  mysql-als:
+    image: mysql/mysql-server
+    container_name: dt_mysql_als
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./sql-init/:/docker-entrypoint-initdb.d/
+    environment:
+      - MYSQL_USER=${DBUSER:-account_lookup}
+      - MYSQL_PASSWORD=${DBPASS:-password}
+      - MYSQL_DATABASE=${DBUSER:-account_lookup}
       - MYSQL_ALLOW_EMPTY_PASSWORD=true
 
   kafka:

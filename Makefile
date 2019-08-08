@@ -115,7 +115,7 @@ test-config-setup:
 log:
 		# logs -f kafka ml-api-adapter central-ledger simulator
 	docker-compose -f ./docker/docker-compose.base.yml \
-		logs -f kafka central-ledger simulator quoting-service
+		logs -f ${services}
 
 get_positions:
 	@./scripts/_get_positions.sh
