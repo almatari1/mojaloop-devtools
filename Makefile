@@ -60,7 +60,7 @@ start-ml-local:
 	docker-compose \
 		-f ./docker/docker-compose.base.yml \
 		-f ./docker/docker-compose.ml-local.yml \
-		up -d
+		up -d ${services} ml-api-adapter-endpoint
 
 ##
 # Start docker-compose in the following manner:
@@ -77,7 +77,7 @@ start-cl-local:
 	docker-compose \
 		-f ./docker/docker-compose.base.yml \
 		-f ./docker/docker-compose.cl-local.yml \
-		up -d
+		up -d ${services}
 
 
 ##
@@ -94,7 +94,7 @@ test-config: test-config-migrate test-config-setup
 
 test-config-migrate:
 	$(info $(cyn)[Running migrations from `central-ledger`]$(reset))
-	./scripts/util/_wait_for_centralledger_init.sh
+	# ./scripts/util/_wait_for_centralledger_init.sh
 	$(call fcmd_centralledger,"npm run migrate")
 	@touch test-config-migrate
 
@@ -107,13 +107,19 @@ test-config-setup:
 ##
 # Run Tests
 ## 
+test-integration-ml-api:
+	$(info $(cyn)[Running integration tests for ml-api-adapter]$(reset))
+	$(call fcmd_mlapiadapter,"ENDPOINT_URL=ml-api-adapter-endpoint:4545 npm run test:int")
+
+test-integration-central-ledger:
+	$(info $(cyn)[Running integration tests for central-ledger]$(reset))
+	$(call fcmd_centralledger,"npm run test:int")
 
 
 ##
 # Utils
 ##
 log:
-		# logs -f kafka ml-api-adapter central-ledger simulator
 	docker-compose -f ./docker/docker-compose.base.yml \
 		logs -f ${services}
 
@@ -166,6 +172,10 @@ reset-test-config:
 
 define fcmd_centralledger
 	docker exec -it dt_central-ledger /bin/sh -c $(1)
+endef
+
+define fcmd_mlapiadapter
+	docker exec -it dt_ml-api-adapter /bin/sh -c $(1)
 endef
 
 
