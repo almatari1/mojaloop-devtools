@@ -1,4 +1,32 @@
-#TODO!
+version: "3.7"
+services:
+  central-ledger:
+    build:
+      dockerfile: test-integration.Dockerfile
+      context: ../../central-ledger
+      cache_from: 
+        - mojaloop/central-ledger
+        - mojaloop/central-ledger:latest
+        - central-ledger
+        - central-ledger:test
+    image: central-ledger:test
+    container_name: dt_central-ledger
+    links:
+        - mysql
+        - kafka
+    ports:
+      - "3001:3001"
+    volumes:
+        - ./central-ledger/default.json:/opt/central-ledger/config/default.json
+        - ../../central-ledger/test:/opt/central-ledger/test
+        - ../../central-ledger/src:/opt/central-ledger/src
+    command:
+      - tail 
+      - -f 
+      - /dev/null
+      
+
+# TODO!
 # version: "3.7"
 # services:
 #   ml-api-adapter:

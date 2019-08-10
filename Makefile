@@ -84,7 +84,12 @@ start-cl-local:
 # Stop Services
 ## 
 stop:
-	docker-compose -f ./docker/docker-compose.base.yml stop
+	$(info $(red)[Stopping all services]$(reset))
+	@docker-compose \
+		-f ./docker/docker-compose.base.yml \
+		-f ./docker/docker-compose.cl-local.yml \
+		-f ./docker/docker-compose.ml-local.yml \
+	 stop
 
 
 ##
