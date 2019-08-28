@@ -15,7 +15,8 @@ CENTRAL_LEDGER_HOST=localhost:3001
 # SIMULATOR_HOST=simulator.moja-box.vessels.tech - cloud kube env
 # SIMULATOR_HOST=localhost:8444 - everything is local env
 SIMULATOR_HOST=simulator:8444 #- docker env
-# SIMULATOR_HOST=host.docker.internal #switch is running in docker, dfsps are
+DFSP_HOST_1=host.docker.internal:4000
+# SIMULATOR_HOST=host.docker.internal #switch is running in docker, dfsps are not
 
 logStep "Creating payerfsp and payeefsp"
 
@@ -87,18 +88,17 @@ function registerEndpoint {
     -d "${DATA}"
 }
 
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_PUT\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/participants/{{partyIdType}}/{{partyIdentifier}}\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_PUT_ERROR\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/participants/{{partyIdType}}/{{partyIdentifier}}/error\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/participants/{{requestId}}\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT_ERROR\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/participants/{{requestId}}/error\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTIES_GET\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/parties/{{partyIdType}}/{{partyIdentifier}}\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTIES_PUT\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/parties/{{partyIdType}}/{{partyIdentifier}}\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTIES_PUT_ERROR\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/parties/{{partyIdType}}/{{partyIdentifier}}/error\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_QUOTES\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_TRANSFER_POST\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/transfers\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_TRANSFER_PUT\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/transfers/{{transferId}}\" }"
-registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_TRANSFER_ERROR\", \"value\": \"http://${SIMULATOR_HOST}/payerfsp/transfers/{{transferId}}/error\" }"
-
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_PUT\", \"value\": \"http://${DFSP_HOST_1}/participants/{{partyIdType}}/{{partyIdentifier}}\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_PUT_ERROR\", \"value\": \"http://${DFSP_HOST_1}/participants/{{partyIdType}}/{{partyIdentifier}}/error\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT\", \"value\": \"http://${DFSP_HOST_1}/participants/{{requestId}}\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_BATCH_PUT_ERROR\", \"value\": \"http://${DFSP_HOST_1}/participants/{{requestId}}/error\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTIES_GET\", \"value\": \"http://${DFSP_HOST_1}/parties/{{partyIdType}}/{{partyIdentifier}}\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTIES_PUT\", \"value\": \"http://${DFSP_HOST_1}/parties/{{partyIdType}}/{{partyIdentifier}}\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTIES_PUT_ERROR\", \"value\": \"http://${DFSP_HOST_1}/parties/{{partyIdType}}/{{partyIdentifier}}/error\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_QUOTES\", \"value\": \"http://${DFSP_HOST_1}\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_TRANSFER_POST\", \"value\": \"http://${DFSP_HOST_1}/transfers\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_TRANSFER_PUT\", \"value\": \"http://${DFSP_HOST_1}/payerfstransfers/{{transferId}}\" }"
+registerEndpoint payerfsp "{ \"type\": \"FSPIOP_CALLBACK_URL_TRANSFER_ERROR\", \"value\": \"http://${DFSP_HOST_1}/transfers/{{transferId}}/error\" }"
 
 registerEndpoint payeefsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_PUT\", \"value\": \"http://${SIMULATOR_HOST}/payeefsp/participants/{{partyIdType}}/{{partyIdentifier}}\" }"
 registerEndpoint payeefsp "{ \"type\": \"FSPIOP_CALLBACK_URL_PARTICIPANT_PUT_ERROR\", \"value\": \"http://${SIMULATOR_HOST}/payeefsp/participants/{{partyIdType}}/{{partyIdentifier}}/error\" }"

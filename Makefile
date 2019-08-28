@@ -87,9 +87,9 @@ stop:
 	$(info $(red)[Stopping all services]$(reset))
 	@docker-compose \
 		-f ./docker/docker-compose.base.yml \
-		-f ./docker/docker-compose.cl-local.yml \
-		-f ./docker/docker-compose.ml-local.yml \
 	 stop
+		# -f ./docker/docker-compose.ml-local.yml \
+		# -f ./docker/docker-compose.cl-local.yml \
 
 
 ##
@@ -106,7 +106,9 @@ test-config-migrate:
 test-config-setup:
 	$(info $(cyn)[Setting up test config]$(reset))
 	@./scripts/00_set_up_env.sh
-	@./scripts/01_create_dfsps.sh
+	# TODO: switch out properly
+	@./scripts/01_create_dfsps_real.sh 
+	# @./scripts/01_create_dfsps.sh
 	@touch test-config-setup
 
 ##
