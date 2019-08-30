@@ -28,7 +28,7 @@ BOILERPLATE_TEXT="# [DEPRECATED] [service name] service
 
 The [service name] service was deprecated as of January 2018. This service is no longer maintained as it is no longer in the scope of the Mojaloop OSS community. [insert specific notes, e.g.: There are currently no alternatives to simulate USSD behaviour, however for other Mojaloop DFSP simulator needs, refer to the general [Simulator](https://github.com/mojaloop/simulator).]
 
-For a list of active Mojaloop repos, please refer to the list maintained in the [documentation](todo).
+For a list of active Mojaloop repos, please refer to [Repo Details](https://mojaloop.io/documentation/repositories/) section in the Mojaloop documentation.
 "
 
 function openRepo() {
