@@ -26,9 +26,9 @@ BOILERPLATE_TEXT="# [DEPRECATED] [service name] service
 
 ## Deprecation Notice
 
-The [service name] service was deprecated as of January 2018. This service is no longer maintained as it is no longer in the scope of the Mojaloop OSS community. [insert specific notes, e.g.: There are currently no alternatives to simulate USSD behaviour, however for other Mojaloop DFSP simulator needs, refer to the general [Simulator](https://github.com/mojaloop/simulator).]
+The [service name] service was deprecated as of January 2018. This service is no longer maintained, and is no longer referenced by any releases of Mojaloop. [insert specific notes, e.g.: There are currently no alternatives to simulate USSD behaviour, however for other Mojaloop DFSP simulator needs, refer to the general [Simulator](https://github.com/mojaloop/simulator).]
 
-For a list of active Mojaloop repos, please refer to [Repo Details](https://mojaloop.io/documentation/repositories/) section in the Mojaloop documentation.
+For a list of active Mojaloop repos, please refer to [Repo Details](https://mojaloop.io/documentation/repositories/) section of the Mojaloop documentation.
 "
 
 function openRepo() {
@@ -51,7 +51,7 @@ function cloneRepo() {
 
     git remote add mojaloop git@github.com:mojaloop/${REPO}.git
     git pull mojaloop master
-    git checkout -b ${BRANCH_NAME}
+    git checkout -b {BRANCH_NAME}
   fi
 }
 
@@ -74,6 +74,7 @@ function pushUpstreamAndPR() {
 
   cd ${REPO_PATH}
   git commit -am "Add deprecation boilerplate"
+  # git commit -am "Tidying deprecation notice"
   git push -u origin ${BRANCH_NAME}
 
   logSubStep "opening PR link: ${REPO}"
