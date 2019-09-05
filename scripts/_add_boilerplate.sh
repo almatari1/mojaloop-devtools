@@ -16,8 +16,8 @@ BP_DIR="$MOJALOOP_DIR/bp"
 mkdir -p ${BP_DIR}
 
 # Test with just 3
-REPOS="dfsp-account dfsp-admin dfsp-api"
-# REPOS="dfsp-account dfsp-admin dfsp-api dfsp-directory dfsp-identity dfsp-ledger dfsp-mock dfsp-rule dfsp-scheme-adapter dfsp-subscription dfsp-transfer central-hub  central-end-user-registry interop-ilp-conditions"
+# REPOS="dfsp-account dfsp-admin dfsp-api"
+REPOS="dfsp-directory dfsp-identity dfsp-mock dfsp-rule dfsp-scheme-adapter dfsp-subscription dfsp-transfer central-hub  central-end-user-registry interop-ilp-conditions"
 
 ##Constants
 REPO_PREFIX=""
@@ -51,7 +51,7 @@ function cloneRepo() {
 
     git remote add mojaloop git@github.com:mojaloop/${REPO}.git
     git pull mojaloop master
-    git checkout -b {BRANCH_NAME}
+    git checkout -b ${BRANCH_NAME}
   fi
 }
 
@@ -73,8 +73,10 @@ function pushUpstreamAndPR() {
   logSubStep "pushing upstream repo: ${REPO}"
 
   cd ${REPO_PATH}
+  git checkout -b "${BRANCH_NAME}" || 'already checked out!'
+  git add .
   git commit -am "Add deprecation boilerplate"
-  # git commit -am "Tidying deprecation notice"
+  # # git commit -am "Tidying deprecation notice"
   git push -u origin ${BRANCH_NAME}
 
   logSubStep "opening PR link: ${REPO}"
